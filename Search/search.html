@@ -1,0 +1,88 @@
+<html>
+<head>
+  <title> Search </title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+<body>
+  <form>
+    <input list="answers" id="answer" value = '' onchange="func()">
+    <datalist id="answers">
+      <option value="HTML">
+      <option value="CSS">
+      <option value="JavaScript">
+      <option value="Java">
+      <option value="Ruby">
+      <option value="PHP">
+      <option value="Go">
+      <option value="Erlang">
+      <option value="Python">
+      <option value="C">
+      <option value="C#">
+      <option value="C++">
+    </datalist>
+  </form>
+  <ul id = "list">
+  </ul>
+  <input type = "date" id = "date" value = ''/>
+  <input type = "button" onclick = "sel()" value = "Search"/>
+  <p id = "disp"></p>
+  <script>
+  var res = "";
+  var dict = {};
+  $(document).ready(function(){
+    $("#list").append("<li> hi </li>");
+    dict = JSON.parse(localStorage.getItem('obj'));
+});
+  //var dict = {};
+  function sel()
+  {
+    var result = ""
+    var x = document.getElementById('date').value;
+    for(var k in dict)
+    {
+      if(k===x)
+      {
+        //alert(dict[k]);
+        for(var j=0; j < dict[k].length; j++)
+            result += dict[k][j] + "<br />";
+      }
+      else {
+            alert('No records');
+        }
+    }
+    document.getElementById("disp").innerHTML = result;
+
+  }
+
+  function func()
+  {
+        var a = document.getElementById('answer').value;
+        var x = document.getElementById('answers').options.length;
+        for(var i = 0; i < x; i++)
+        {
+          var j = document.getElementById('answers').options[i].value;
+          if( j === a)
+          {
+            var d = new Date()
+            if(d.getMonth() < 9)
+              var dat = d.getFullYear() + "-0" + (d.getMonth()+1) + "-" + d.getDate();
+            else
+              var dat = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+            res = res + a + " " + dat + "<br />";
+            document.getElementById("disp").innerHTML = res;
+            if(!dict[dat])
+              dict[dat] = [];
+            dict[dat].push(a);
+            localStorage.setItem('obj',JSON.stringify(dict));
+            break;
+          }
+        }
+        if(i == x)
+        {
+          res = res + "No result found" + "<br />";
+          document.getElementById("disp").innerHTML = res;
+        }
+      }
+  </script>
+</body>
+</html>
