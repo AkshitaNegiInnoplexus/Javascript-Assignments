@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title> Bookmarks </title>
+  <link rel="stylesheet" href="bookmark.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+<body>
+<ul class="tab">
+  <li><a href="#" class="tablinks" onclick="openCity(event, 'Tab1')">Tab 1</a></li>
+  <li><a href="#" class="tablinks" onclick="openCity(event, 'Tab2')">Tab 2</a></li>
+  <li><a href="#" class="tablinks" onclick="openCity(event, 'Bookmarks')" id = "demo">Bookmarks 0</a></li>
+</ul>
+
+<div id="Tab1" class="tabcontent">
+  <table>
+    <tr>
+      <th colspan="6"> Name </td>
+      <th colspan="4"> Author </td>
+      <th colspan="6"> Publication </td>
+      <th colspan="6"> Boomark </td>
+    </tr>
+    <tr>
+      <td colspan="6">Book 1</td>
+      <td colspan="4">J.K Rowling</td>
+      <td colspan="6">Bloomsbury</td>
+      <td colspan="6"><input type = "button" value = "Bookmark" id = "Book 1"  onclick = "counter(this,'1')"/> </td>
+    </tr>
+    <tr>
+      <td colspan="6">Book 2</td>
+      <td colspan="4">Agatha Christie</td>
+      <td colspan="6">Bloomsbury</td>
+      <td colspan="6"><input type = "button" value = "Bookmark" id = "Book 2"  onclick = "counter(this,'1')"/> </td>
+    <tr>
+      <td colspan="6">Book 3</td>
+      <td colspan="4">Monica Mccarty</td>
+      <td colspan="6">Bloomsbury</td>
+      <td colspan="6"><input type = "button" value = "Bookmark" id = "Book 3"  onclick = "counter(this,'1')"/> </td>
+    </tr>
+  </table>
+  <div class='button'>
+      <a href="#" id ="export" role='button'><input type = "button" value = "Export" onclick = "export()"/>
+      </a>
+  </div>
+</div>
+
+
+
+<div id="Tab2" class="tabcontent">
+  <table>
+    <tr>
+      <th colspan="6"> Name </td>
+      <th colspan="4"> Author </td>
+      <th colspan="6"> Publication </td>
+      <th colspan="6"> Boomark </td>
+    </tr>
+    <tr>
+      <td colspan="6">Book 4</td>
+      <td colspan="4">J.K Rowling</td>
+      <td colspan="6">Bloomsbury</td>
+      <td colspan="6"><input type = "button" value = "Bookmark" id = "Book 4"  onclick = "counter(this,'2')"/> </td>
+    </tr>
+    <tr>
+      <td colspan="6">Book 5</td>
+      <td colspan="4">Agatha Christie</td>
+      <td colspan="6">Bloomsbury</td>
+      <td colspan="6"><input type = "button" value = "Bookmark" id = "Book 5"  onclick = "counter(this,'2')"/> </td>
+    <tr>
+      <td colspan="6">Book 6</td>
+      <td colspan="4">Monica Mccarty</td>
+      <td colspan="6">Bloomsbury</td>
+      <td colspan="6"><input type = "button" value = "Bookmark" id = "Book 6"  onclick = "counter(this,'2')"/> </td>
+    </tr>
+  </table>
+  <div class='button'>
+      <a href="#" id ="export1" role='button'><input type = "button" value = "Export" />
+      </a>
+  </div>
+</div>
+
+<div id="Bookmarks" class="tabcontent">
+  <div class="dropdown">
+    <button onclick="dropdown()" class="dropbtn">Select Tab</button>
+      <div id="myDropdown" class="dropdown-content">
+          <a href="#Tab1_disp" id = "1" onclick = "disp(this)">Tab 1</a>
+          <a href="#Tab2_disp" id = "2" onclick = "disp(this)">Tab 2</a>
+      </div>
+      <p id = "disp"></p>
+  </div>
+</div>
+
+<script type = "text/javascript" src = "bookmark.js"></script>
+<script type='text/javascript'>
+$(document).ready(function () {
+
+    console.log("HELLO")
+    function exportTableToCSV($table, filename) {
+        var $headers = $table.find('tr:has(th)')
+            ,$rows = $table.find('tr:has(td)')
+
+            // Temporary delimiter characters unlikely to be typed by keyboard
+            // This is to avoid accidentally splitting the actual contents
+            ,tmpColDelim = String.fromCharCode(11) // vertical tab character
+            ,tmpRowDelim = String.fromCharCode(0) // null character
+
+            // actual delimiter characters for CSV format
+            ,colDelim = '","'
+            ,rowDelim = '"\r\n"';
+            console.log($rows);
+            // Grab text from table into CSV formatted string
+            var csv = '"';
+            csv += formatRows($headers.map(grabRow));
+            csv += rowDelim;
+            csv += formatRows($rows.map(grabRow)) + '"';
+
+            // Data URI
+            var csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+        $(this)
+            .attr({
+            'download': filename
+                ,'href': csvData
+                //,'target' : '_blank' //if you want it to open in a new window
+        });
+
+        //------------------------------------------------------------
+        // Helper Functions
+        //------------------------------------------------------------
+        // Format the output so it has the appropriate delimiters
+        function formatRows(rows){
+            return rows.get().join(tmpRowDelim)
+                .split(tmpRowDelim).join(rowDelim)
+                .split(tmpColDelim).join(colDelim);
+        }
+        // Grab and format a row from the table
+        function grabRow(i,row){
+            var $row = $(row);
+            //for some reason $cols = $row.find('td') || $row.find('th') won't work...
+            var $cols = $row.find('td');
+            console.log($cols.length);
+            if(!$cols.length) $cols = $row.find('th');
+
+            return $cols.map(grabCol)
+                        .get().join(tmpColDelim);
+        }
+        // Grab and format a column from the table
+        function grabCol(j,col){
+            if(j == 1)
+            {
+              var $col = $(col),
+                $text = $col.text();
+                console.log($text + "**");
+              return $text.replace('"', '""'); // escape double quotes
+            }
+
+        }
+    }
+
+
+    // This must be a hyperlink
+    $("#export").click(function (event) {
+        // var outputFile = 'export'
+        var outputFile = window.prompt("What do you want to name your output file (Note: This won't have any effect on Safari)") || 'export';
+        outputFile = outputFile.replace('.csv','') + '.csv'
+
+        // CSV
+        exportTableToCSV.apply(this, [$('#Tab1>table'), outputFile]);
+
+        // IF CSV, don't do event.preventDefault() or return false
+        // We actually need this to be a typical hyperlink
+    });
+
+    $("#export1").click(function (event) {
+        // var outputFile = 'export'
+        var outputFile = window.prompt("What do you want to name your output file (Note: This won't have any effect on Safari)") ;
+        outputFile = outputFile.replace('.csv','') + '.csv'
+
+        // CSV
+        exportTableToCSV.apply(this, [$('#Tab2>table'), outputFile]);
+
+        // IF CSV, don't do event.preventDefault() or return false
+        // We actually need this to be a typical hyperlink
+    });
+});
+</script>
+</body>
+</html>
