@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form>
+    <input type = "text" name = "name"/>
+    <input type = "button" value = "submit" onclick = "myFunction(document.getElementsByName('name')[0].value)" />
+</form>
+<p id="demo"></p>
+
+<script>
+function myFunction(str) {
+
+  var s = str.split(',');
+  var res = "";
+  var sum = 0;
+  for (var i = 0; i < s.length; i++)
+  {
+
+         var sp = s[i].trim();
+         var x = sp.split(' ');
+         if(x[0] ==  'P' && x.length > 1)
+                  sum += Number(x[1]);
+  }
+  document.getElementById("demo").innerHTML = sum;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form>
+  <input type = "text" name = "name"/>
+  <input type = "button" value = "submit" onclick = "myFunction(document.getElementsByName('name')[0].value)" />
+</form>
+<!--<button onclick="myFunction()">Try it</button>-->
+
+<p id="demo"></p>
+
+<script>
+function myFunction(str) {
+    //var str = document.getElementById("name");
+    var res = "";
+    var words = str.split(' ');
+    for(var i = 0; i < words.length; i++)
+    {
+        res += words[i].charAt(0).toUpperCase()+words[i].substring(1,words[i].length-1).toLowerCase()+words[i].charAt(words[i].length-1).toUpperCase()+"<br />";
+    }
+    document.getElementById("demo").innerHTML = res;
+}
+</script>
+
+</body>
+</html>
